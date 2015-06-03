@@ -14,7 +14,14 @@
     <dom-module id="demo-ctable-element">
       <template>
         <div>
-          <ctable-element data="{{testData}}" columns="{{columns}}"></ctable-element>
+          <ctable-element data="{{testData}}" 
+             selected="{{list}}"
+             columns="{{columns}}">
+          </ctable-element>
+          Select <span>{{list.length}}</span>
+          <template is="dom-repeat" items="[[list]]" as="item">
+            <span>[[item]]<span>
+          </template>
         </div>
       </template>
     </dom-module>
@@ -26,15 +33,15 @@
           testData: {
             type: Array,
             value: [
-              ['A', 'B', 'C', 'D'],
-              ['A', 'B', 'C', 'D'],
-              ['A', 'B', 'C', 'D'],
-              ['A', 'B', 'C', 'D']
+              ['A0', 'B', 'C', 'D'],
+              ['A1', 'B', 'C', 'D'],
+              ['A2', 'B', 'C', 'D'],
+              ['A3', 'B', 'C', 'D']
             ]
           },
           columns:{
             type: Array,
-            value: ['COL1', 'COL2', 'COL3', 'COL4', 'COL4']
+            value: ['COL1', 'COL2', 'COL3', 'COL4']
           }
         }
       });

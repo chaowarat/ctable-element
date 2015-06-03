@@ -1,5 +1,3 @@
-
-
 <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <style>
@@ -41,19 +39,26 @@
       <!-- column header -->
       <thead>
         <tr>
-        <template is="dom-repeat" items="[[columns]]">
+         <td>
+           <paper-checkbox id="checkAll" on-change="handleSelectAll">
+           </paper-checkbox>
+         </td>
+         <template is="dom-repeat" items="[[columns]]">
           <td>[[item]]</td>
-        </template>
+         </template>
         </tr>
       </thead>
       <!-- table body -->
-      <tbody>
+      <tbody id="content">
         <template is="dom-repeat" items="[[data]]" as="row">
           <tr>
-            <td><paper-checkbox>Select</paper-checkbox></td>
-            <template is="dom-repeat" items="[[row]]" as="col">
-              <td>[[col]]</td>
-            </template>
+           <td>
+            <paper-checkbox on-change="handleSelect">
+            </paper-checkbox>
+           </td>
+           <template is="dom-repeat" items="[[row]]" as="col">
+            <td>[[col]]</td>
+           </template>
           </tr>
         </template>
       </tbody>
@@ -66,7 +71,48 @@
     is: 'ctable-element',
     properties: {
       columns: Array,
-      data: Array
+      data: Array,
+      selected : {
+        type: Array,
+        notify: true
+      }
+    },
+    handleSelectAll: function(e) {
+      var trList = Polymer.dom(this.$.content).querySelectorAll('tr');
+      for(var i=0;i<trList.length;i++) {
+        var checkbox = Polymer.dom(trList[i].firstElementChild).querySelector('paper-checkbox');
+        checkbox.checked = e.srcElement.checked;
+        var trElement = checkbox.parentElement.parentNode;
+        if(e.srcElement.checked) {
+          trElement.style.backgroundColor = "#F5F5F5";
+        } else {
+          trElement.style.backgroundColor = "#FFFFFF";
+        }
+      }
+      this._updateSelected();
+    },
+    _updateSelected : function() {
+      var tmp = [];
+      var trList = Polymer.dom(this.$.content).querySelectorAll('tr');
+      for(var i=0;i<trList.length;i++) {
+        var checkbox = Polymer.dom(trList[i].firstElementChild).querySelector('paper-checkbox');
+        if(checkbox.checked) {
+          tmp.push(this.data[i]);
+        }
+      }
+      this.selected = tmp;
+      console.log(this.selected);
+    },
+    handleSelect: function(e) {
+      this.$.checkAll.checked = false;
+      var tdElement = e.srcElement.parentElement;
+      var trElement = tdElement.parentNode;
+      if(e.srcElement.checked) {
+        trElement.style.backgroundColor = "#F5F5F5";
+      } else {
+        trElement.style.backgroundColor = "#FFFFFF";
+      }
+      this._updateSelected();
     }
   });
 </script>
