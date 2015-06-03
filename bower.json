@@ -1,0 +1,22 @@
+{
+  "name": "ctable-element",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "ctable"
+  ],
+  "main": "ctable-element.html",
+  "homepage": "https://github.com/chaowarat/ctable-element",
+  "ignore": [
+    "/.*",
+    "bower_components",
+    "/test/"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "paper-checkbox": "PolymerElements/paper-checkbox#^1.0.0"
+  }
+}

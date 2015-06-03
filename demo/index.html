@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>seed-element Demo</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    
+    <link rel="import" href="../ctable-element.html">
+  </head>
+  <body>
+    <p>An example of <code>&lt;ctable-element&gt;</code>:</p>
+
+    <dom-module id="demo-ctable-element">
+      <template>
+        <div>
+          <ctable-table data="{{testData}}" columns="{{columns}}"></ctable-table>
+        </div>
+      </template>
+    </dom-module>
+    
+    <script>
+      Polymer({
+        is:'demo-ctable-element',
+        properties: {
+          testData: {
+            type: Array,
+            value: [
+              ['A', 'B', 'C', 'D'],
+              ['A', 'B', 'C', 'D'],
+              ['A', 'B', 'C', 'D'],
+              ['A', 'B', 'C', 'D']
+            ]
+          },
+          columns:{
+            type: Array,
+            value: ['COL1', 'COL2', 'COL3', 'COL4', 'COL4']
+          }
+        }
+      });
+    </script>
+    
+    <demo-ctable-element></demo-ctable-element>
+
+  </body>
+</html>
