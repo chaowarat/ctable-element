@@ -33,15 +33,17 @@
           testData: {
             type: Array,
             value: [
-              ['A0', 'B', 'C', 'D'],
-              ['A1', 'B', 'C', 'D'],
-              ['A2', 'B', 'C', 'D'],
-              ['A3', 'B', 'C', 'D']
+            {'CID':12345566,'Name':'P. Kijsanayothin'}, 
+            {'CID':12345567,'Name':'S. Kijsanayothin'}, 
+            {'CID':12345560,'Name':'A. Kijsanayothin'}
             ]
           },
           columns:{
             type: Array,
-            value: ['COL1', 'COL2', 'COL3', 'COL4']
+            value: [  // property : label
+              {'label':'cid #1','property':'CID'}, 
+              {'label':'name #2','property':'Name'}
+            ]
           }
         }
       });

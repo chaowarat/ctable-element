@@ -44,7 +44,7 @@
            </paper-checkbox>
          </td>
          <template is="dom-repeat" items="[[columns]]">
-          <td>[[item]]</td>
+         <td>{{item.label}}</td>
          </template>
         </tr>
       </thead>
@@ -56,8 +56,8 @@
             <paper-checkbox on-change="handleSelect">
             </paper-checkbox>
            </td>
-           <template is="dom-repeat" items="[[row]]" as="col">
-            <td>[[col]]</td>
+           <template is="dom-repeat" items="[[columns]]" as="col">
+           <td>{{_getObjectValue(row,col)}}</td>
            </template>
           </tr>
         </template>
@@ -70,7 +70,10 @@
   Polymer({
     is: 'ctable-element',
     properties: {
-      columns: Array,
+      columns: { 
+        type:Array,
+        notify: true
+      },
       data: Array,
       selected : {
         type: Array,
@@ -78,6 +81,7 @@
       }
     },
     handleSelectAll: function(e) {
+      console.log(this.columns);
       var trList = Polymer.dom(this.$.content).querySelectorAll('tr');
       for(var i=0;i<trList.length;i++) {
         var checkbox = Polymer.dom(trList[i].firstElementChild).querySelector('paper-checkbox');
@@ -102,6 +106,9 @@
       }
       this.selected = tmp;
       console.log(this.selected);
+    },
+    _getObjectValue: function(obj,col) {
+      return obj[col.property];
     },
     handleSelect: function(e) {
       this.$.checkAll.checked = false;
