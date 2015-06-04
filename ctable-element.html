@@ -1,5 +1,7 @@
 <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <style>
     :host {
       display: block;
@@ -14,26 +16,13 @@
       color: rgba(0, 0, 0, 0.87);
       border-radius: 3px;
     }
-    .table-content thead tr{
-      padding-left: 50px;
-      color: rgba(0, 0, 0, 0.57);
-      height: 64px;
-    }
-    .table-content tbody tr:hover{
-      background-color: #EEEEEE;
-      cursor: pointer;
-    }
     .table-content tr{
       border-bottom: 2px solid #EEEEEE;
-      height: 48px;
-    }
-    .table-content tfoot tr{
-      height: 56px;
-      text-align: right;
     }
     .table-content tr td:first-child {
       width: 48px;
       padding-left: 24px;
+      padding-right: 24px;
     }
     .table-content tr td:nth-child(2) {
       padding-left: 0px;
@@ -41,10 +30,36 @@
     }
     .table-content tr td:nth-child(n+3) {
       padding-left: 56px;
-      padding-right: 56px;
+      padding-right: 24px;
+    }
+    
+    .table-content thead tr{
+      color: rgba(0, 0, 0, 0.57);
+      height: 64px;
+    }
+    .table-content tbody tr{
+      height: 48px;
+    }
+    .table-content tbody tr:hover{
+      background-color: #EEEEEE;
+      cursor: pointer;
+    }
+    .table-content tfoot tr{
+      height: 56px;
+      color: rgba(0, 0, 0, 0.57);
+      text-align: right;
+    }
+    .table-content tfoot tr td:last-child{
+      padding-right: 14px;
     }
     .td-is-number{
       text-align: right;
+    }
+    .row-per-page{
+      padding-left:40px;
+    }
+    .row-count{
+      padding-left:32px
     }
 </style>
   
@@ -78,7 +93,14 @@
       <tfoot>
         <tr>
           <td></td>
-          <td colspan$="[[columns.length]]">Rows per page:</td>
+          <td colspan$="[[columns.length]]">
+              Rows per page:
+              <span class="row-per-page">{{data.length}}</span>
+              <span class="row-count"></span>A-B of X
+              <span class="row-count"></span>
+            <paper-icon-button icon="arrow-back"></paper-icon-button>
+            <paper-icon-button icon="arrow-forward"></paper-icon-button>
+          </td>
         </tr>
       </tfoot>
     </table>
