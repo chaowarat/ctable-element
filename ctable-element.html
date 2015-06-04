@@ -1,7 +1,11 @@
 <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 <link rel="import" href="../paper-checkbox/paper-checkbox.html">
 <style>
+    :host {
+      display: block;
+    }
     .table-content {
+      width: 100%;
       border-collapse: collapse;
       font-family: 'Roboto Regular', sans-serif;
       font-size: 13px;
@@ -10,10 +14,10 @@
       color: rgba(0, 0, 0, 0.87);
       border-radius: 3px;
     }
-    .table-content thead{
+    .table-content thead tr{
       padding-left: 50px;
       color: rgba(0, 0, 0, 0.57);
-      height: 56px;
+      height: 64px;
     }
     .table-content tbody tr:hover{
       background-color: #EEEEEE;
@@ -23,13 +27,24 @@
       border-bottom: 2px solid #EEEEEE;
       height: 48px;
     }
+    .table-content tfoot tr{
+      height: 56px;
+      text-align: right;
+    }
     .table-content tr td:first-child {
-      padding-left: 20px;
+      width: 48px;
+      padding-left: 24px;
+    }
+    .table-content tr td:nth-child(2) {
+      padding-left: 0px;
       padding-right: 56px;
     }
-    .table-content tr td:not(:first-child) {
+    .table-content tr td:nth-child(n+3) {
       padding-left: 56px;
       padding-right: 56px;
+    }
+    .td-is-number{
+      text-align: right;
     }
 </style>
   
@@ -40,11 +55,10 @@
       <thead>
         <tr>
          <td>
-           <paper-checkbox id="checkAll" on-change="handleSelectAll">
-           </paper-checkbox>
+           <paper-checkbox id="checkAll" on-change="handleSelectAll"></paper-checkbox>
          </td>
          <template is="dom-repeat" items="[[columns]]">
-         <td>{{item.label}}</td>
+          <td class$="{{_renderClass(item)}}">{{item.label}}</td>
          </template>
         </tr>
       </thead>
@@ -52,16 +66,21 @@
       <tbody id="content">
         <template is="dom-repeat" items="[[data]]" as="row">
           <tr>
-           <td>
-            <paper-checkbox on-change="handleSelect">
-            </paper-checkbox>
-           </td>
-           <template is="dom-repeat" items="[[columns]]" as="col">
-           <td>{{_getObjectValue(row,col)}}</td>
-           </template>
+            <td>
+              <paper-checkbox on-change="handleSelect"></paper-checkbox>
+            </td>
+            <template is="dom-repeat" items="[[columns]]" as="col">
+              <td class$="{{_renderClass(col)}}">{{_getObjectValue(row,col)}}</td>
+            </template>
           </tr>
         </template>
       </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td colspan$="[[columns.length]]">Rows per page:</td>
+        </tr>
+      </tfoot>
     </table>
   </template>
 </dom-module>
@@ -109,6 +128,11 @@
     },
     _getObjectValue: function(obj,col) {
       return obj[col.property];
+    },
+     _renderClass: function(col) {
+      if(col.type.toLocaleLowerCase() == 'number'){
+        return 'td-is-number';
+      }
     },
     handleSelect: function(e) {
       this.$.checkAll.checked = false;

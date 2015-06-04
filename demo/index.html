@@ -13,7 +13,7 @@
 
     <dom-module id="demo-ctable-element">
       <template>
-        <div>
+        <div style="width:100%">
           <ctable-element data="{{testData}}" 
              selected="{{list}}"
              columns="{{columns}}">
@@ -33,16 +33,18 @@
           testData: {
             type: Array,
             value: [
-            {'CID':12345566,'Name':'P. Kijsanayothin'}, 
-            {'CID':12345567,'Name':'S. Kijsanayothin'}, 
-            {'CID':12345560,'Name':'A. Kijsanayothin'}
+            {'CID':12345566,'Name':'P. Kijsanayothin','Sign':'#','Age':'20'}, 
+            {'CID':12345567,'Name':'S. Kijsanayothin','Sign':'@','Age':'21'}, 
+            {'CID':12345560,'Name':'A. Kijsanayothin','Sign':'!','Age':'22'}
             ]
           },
           columns:{
             type: Array,
             value: [  // property : label
-              {'label':'cid #1','property':'CID'}, 
-              {'label':'name #2','property':'Name'}
+              {'label':'cid #1','property':'CID','type':'string'}, 
+              {'label':'name #2','property':'Name','type':'string'},
+              {'label':'sign #3','property':'Sign','type':'string'},
+              {'label':'age #4','property':'Age','type':'number'}
             ]
           }
         }
