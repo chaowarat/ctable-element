@@ -15,21 +15,13 @@
       border: 1px solid #e5e5e5;
       color: rgba(0, 0, 0, 0.87);
       border-radius: 3px;
+      overflow: auto;
     }
     .table-content tr{
       border-bottom: 2px solid #EEEEEE;
     }
-    .table-content tr td:first-child {
-      width: 48px;
+    .table-content tr td {
       padding-left: 24px;
-      padding-right: 24px;
-    }
-    .table-content tr td:nth-child(2) {
-      padding-left: 0px;
-      padding-right: 56px;
-    }
-    .table-content tr td:nth-child(n+3) {
-      padding-left: 56px;
       padding-right: 24px;
     }
     
@@ -69,21 +61,25 @@
       <!-- column header -->
       <thead>
         <tr>
-         <td>
-           <paper-checkbox id="checkAll" on-change="handleSelectAll"></paper-checkbox>
-         </td>
-         <template is="dom-repeat" items="[[columns]]">
-          <td class$="{{_renderClass(item)}}">{{item.label}}</td>
-         </template>
+          <template is="dom-if" if="{{checkbox}}">
+            <td style="width:48px">
+              <paper-checkbox on-change="handleSelectAll"></paper-checkbox>
+            </td>
+          </template>
+          <template is="dom-repeat" items="[[columns]]">
+            <td class$="{{_renderClass(item)}}">{{item.label}}</td>
+          </template>
         </tr>
       </thead>
       <!-- table body -->
       <tbody id="content">
-        <template is="dom-repeat" items="[[data]]" as="row">
+        <template is="dom-repeat" items="[[dataShow]]" as="row">
           <tr>
-            <td>
-              <paper-checkbox on-change="handleSelect"></paper-checkbox>
-            </td>
+            <template is="dom-if" if="{{checkbox}}">
+              <td>
+                <paper-checkbox on-change="handleSelect"></paper-checkbox>
+              </td>
+            </template>
             <template is="dom-repeat" items="[[columns]]" as="col">
               <td class$="{{_renderClass(col)}}">{{_getObjectValue(row,col)}}</td>
             </template>
@@ -94,12 +90,11 @@
         <tr>
           <td></td>
           <td colspan$="[[columns.length]]">
-              Rows per page:
-              <span class="row-per-page">{{data.length}}</span>
-              <span class="row-count"></span>A-B of X
-              <span class="row-count"></span>
-            <paper-icon-button icon="arrow-back"></paper-icon-button>
-            <paper-icon-button icon="arrow-forward"></paper-icon-button>
+            Rows per page:
+            <span class="row-per-page">{{maxRow}}</span>
+            <span class="row-count"></span>{{indexDesc}}
+            <paper-icon-button icon="arrow-back" on-click="_handleBack"></paper-icon-button>
+            <paper-icon-button icon="arrow-forward" on-click="_handleNext"></paper-icon-button>
           </td>
         </tr>
       </tfoot>
@@ -115,10 +110,52 @@
         type:Array,
         notify: true
       },
-      data: Array,
+      data: {
+        type: Array,
+        observer: '_dataChanged'
+      },
+      dataShow: Array,
       selected : {
         type: Array,
         notify: true
+      },
+      checkbox:{
+        type: Boolean,
+        value: true
+      },
+      maxRow:{
+        type: Number,
+        value: 5
+      },
+      indexDesc:{
+        type: String
+      },
+      startRow:{
+        type: Number,
+        value: 1
+      }
+    },
+    _dataChanged: function(){
+      this._indexToString();
+      if(this.data.length > this.maxRow){
+        this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
+      }
+      else{
+        this.dataShow = this.data;
+      }
+    },
+    _indexToString: function(){
+      if(this.maxRow > this.data.length){
+        this.indexDesc = this.startRow + '-' + this.data.length + ' of ' + this.data.length;
+      }
+      else{
+        var toRow = ((this.startRow - 1) + this.maxRow);
+        if(this.data.length > toRow){
+          this.indexDesc = this.startRow + '-' + toRow + ' of ' + this.data.length;
+        }
+        else{
+          this.indexDesc = this.startRow + '-' + this.data.length + ' of ' + this.data.length;
+        }
       }
     },
     handleSelectAll: function(e) {
@@ -142,7 +179,7 @@
       for(var i=0;i<trList.length;i++) {
         var checkbox = Polymer.dom(trList[i].firstElementChild).querySelector('paper-checkbox');
         if(checkbox.checked) {
-          tmp.push(this.data[i]);
+          tmp.push(this.dataShow[i]);
         }
       }
       this.selected = tmp;
@@ -157,7 +194,6 @@
       }
     },
     handleSelect: function(e) {
-      this.$.checkAll.checked = false;
       var tdElement = e.srcElement.parentElement;
       var trElement = tdElement.parentNode;
       if(e.srcElement.checked) {
@@ -166,6 +202,26 @@
         trElement.removeAttribute("style");
       }
       this._updateSelected();
+    },
+    _handleBack: function(){
+      if(this.startRow > 1){
+        this.startRow -= this.maxRow;
+        this._indexToString();
+        this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
+      }
+    },
+    _handleNext: function(){
+      var currentRow = (this.startRow - 1) + this.maxRow;
+      if(currentRow < this.data.length){
+        this.startRow += this.maxRow;
+        this._indexToString();
+        if(this.data.length > currentRow){
+          this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
+        }
+        else{
+          this.dataShow = [];
+        }
+      }
     }
   });
 </script>
