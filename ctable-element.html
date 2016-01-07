@@ -206,7 +206,7 @@
       var currentRow = (this.startRow - 1) + this.maxRow;
       this.startRow += this.maxRow;
       this._indexToString();
-      if(!this.dataShow) this.dataShow =[];
+      if(!this.data) this.data =[];
       if(this.data.length > currentRow){
         this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
       }
