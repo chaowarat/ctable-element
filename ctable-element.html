@@ -136,8 +136,12 @@
       },
       count:{
         type: Number,
-        value: 5
+        value: 5,
+        observer: '_handleCountChanged'
       }
+    },
+    _handleCountChanged: function(){
+      this._indexToString();
     },
     _dataChanged: function(){
       this._indexToString();
