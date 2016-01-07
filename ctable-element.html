@@ -133,6 +133,10 @@
       startRow:{
         type: Number,
         value: 1
+      },
+      count:{
+        type: Number,
+        value: 5
       }
     },
     _dataChanged: function(){
@@ -145,18 +149,7 @@
       }
     },
     _indexToString: function(){
-      if(this.maxRow > this.data.length){
-        this.indexDesc = this.startRow + '-' + this.data.length + ' of ' + this.data.length;
-      }
-      else{
-        var toRow = ((this.startRow - 1) + this.maxRow);
-        if(this.data.length > toRow){
-          this.indexDesc = this.startRow + '-' + toRow + ' of ' + this.data.length;
-        }
-        else{
-          this.indexDesc = this.startRow + '-' + this.data.length + ' of ' + this.data.length;
-        }
-      }
+      this.indexDesc = this.startRow + '-' + ((this.startRow+this.maxRow)-1) + ' of ' + this.count;
     },
     handleSelectAll: function(e) {
       console.log(this.columns);
@@ -204,24 +197,22 @@
       this._updateSelected();
     },
     _handleBack: function(){
-      if(this.startRow > 1){
-        this.startRow -= this.maxRow;
-        this._indexToString();
-        this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
-      }
+      this.startRow -= this.maxRow;
+      this._indexToString();
+      this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
+      this.fire('prev');
     },
     _handleNext: function(){
       var currentRow = (this.startRow - 1) + this.maxRow;
-      if(currentRow < this.data.length){
-        this.startRow += this.maxRow;
-        this._indexToString();
-        if(this.data.length > currentRow){
-          this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
-        }
-        else{
-          this.dataShow = [];
-        }
+      this.startRow += this.maxRow;
+      this._indexToString();
+      if(this.data.length > currentRow){
+        this.dataShow = this.data.slice(this.startRow - 1, this.startRow + this.maxRow - 1);
       }
+      else{
+        this.dataShow = [];
+      }
+      this.fire('next');
     }
   });
 </script>
