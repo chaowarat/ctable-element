@@ -80,7 +80,7 @@
           <template is="dom-repeat" items="[[columns]]">
             <td class="td-header">{{item.label}}
               <paper-icon-button icon="{{sortIcon}}" 
-                title="heart" class="small" on-click="_handleSort"></paper-icon-button>
+                title="{{_iconToString(sortIcon)}}" data-value$="{{item.label}}" class="small" on-click="_handleSort"></paper-icon-button>
             </td>
           </template>
         </tr>
@@ -242,14 +242,34 @@
       this._indexToString();
     },
     _handleSort: function(e){
+      var target = this._findUntil(e.target, 'paper-icon-button', 5);
       if(this.sortIcon == 'arrow-drop-down'){
         this.sortIcon = 'arrow-drop-up';
-        this.fire('sort', 'ascendant');
+        this.fire('sort', {'text':'ascendant', 'value':target.getAttribute('data-value')});
       }
       else{
         this.sortIcon = 'arrow-drop-down';
-        this.fire('sort', 'descendant');
+        this.fire('sort', {'text':'descendant', 'value':target.getAttribute('data-value')});
       }
+    },
+    _iconToString: function(sortIcon){
+      if(sortIcon == 'arrow-drop-down'){
+        return 'descendant';
+      }
+      else{
+        return 'ascendant';
+      }
+    },
+    _findUntil: function(element, expectTag, limitLoop){
+      for(var i = 0; i < limitLoop; i++){
+        if(element.localName == expectTag){
+          return element;
+        }
+        else{
+          element = element.parentNode;
+        }
+      }
+      return null;
     }
   });
 </script>
