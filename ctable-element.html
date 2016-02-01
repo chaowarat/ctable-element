@@ -44,6 +44,12 @@
     .table-content tfoot tr td:last-child{
       padding-right: 14px;
     }
+    .td-header{
+      text-align: center;
+    }
+    td.td-header:hover paper-icon-button.small{
+      color: gray;
+    }
     .td-is-number{
       text-align: right;
     }
@@ -52,6 +58,11 @@
     }
     .row-count{
       padding-left:32px
+    }
+    paper-icon-button.small {
+      width: 50px;
+      height: 50px;
+      color: transparent;
     }
 </style>
   
@@ -67,7 +78,10 @@
             </td>
           </template>
           <template is="dom-repeat" items="[[columns]]">
-            <td class$="{{_renderClass(item)}}">{{item.label}}</td>
+            <td class="td-header">{{item.label}}
+              <paper-icon-button icon="{{sortIcon}}" 
+                title="heart" class="small" on-click="_handleSort"></paper-icon-button>
+            </td>
           </template>
         </tr>
       </thead>
@@ -138,6 +152,10 @@
         type: Number,
         value: 5,
         observer: '_handleCountChanged'
+      },
+      sortIcon: {
+        type: String,
+        value: 'arrow-drop-down'
       }
     },
     _handleCountChanged: function(){
@@ -222,6 +240,16 @@
     setStartPage: function(){
       this.startRow = 1;
       this._indexToString();
+    },
+    _handleSort: function(e){
+      if(this.sortIcon == 'arrow-drop-down'){
+        this.sortIcon = 'arrow-drop-up';
+        this.fire('sort', 'ascendant');
+      }
+      else{
+        this.sortIcon = 'arrow-drop-down';
+        this.fire('sort', 'descendant');
+      }
     }
   });
 </script>
